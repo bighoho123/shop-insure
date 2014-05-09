@@ -1,3 +1,6 @@
+<?php  
+	include("../includes/omniumAPI.php")
+?>
 <!doctype html>
 <!--[if lt IE 7 ]><html lang="en" class="no-js ie6"> <![endif]-->
 <!--[if IE 7 ]><html lang="en" class="no-js ie7"> <![endif]-->
@@ -10,7 +13,8 @@
 <meta name="keywords" content="">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title></title>
-
+<!-- Awesome font -->
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 <!-- main JS libs -->
 <script src="../js/libs/modernizr.min.js"></script>
 <script src="../js/libs/jquery-1.10.0.js"></script>
@@ -25,7 +29,12 @@
 <link rel="stylesheet" href="../css/jquery-steps.css">
 
 <!-- Custome css -->
+<!-- Datepicker -->
+<script src="../js/jquery-ui.multidatespicker.js"></script>
+<link href="../css/jquery-ui-1.8.20.custom.css" rel="stylesheet">
 
+<!-- Placeholders -->
+<script type="text/javascript" src="../js/jquery.powerful-placeholder.min.js"></script>
 <!-- scripts -->
 <script src="../js/general.js"></script>
 
@@ -111,17 +120,172 @@
 			   						Upload
 			   					</div>
 			   					<div id='step2_form' class='form' style='display:none'>
-			   						Form
+			   						<form class="form-horizontal" role="form">
+			   						  <!-- Firstname -->
+									  <div class="form-group">
+									    <label for="firstname" class="col-sm-4 control-label">Firstname</label>
+									    <div class="col-sm-6">
+									      <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Firstname">
+									    </div>
+									  </div>
+									  <!-- Surname -->
+									  <div class="form-group">
+									    <label for="surname" class="col-sm-4 control-label">Surname</label>
+									    <div class="col-sm-6">
+									      <input type="text" class="form-control" id="surname" name="surname" placeholder="Surname">
+									    </div>
+									  </div>
+									  <!-- DOB -->
+									  <div class="form-group">
+									    <label for="dob" class="col-sm-4 control-label">Date of Birth</label>
+									    <div class="col-sm-6">
+									      <input type="text" class="form-control" id="dob" name="dob" placeholder="Date of Birth">
+									    </div>
+									  </div>
+									  <!-- Gender -->
+									  <div class="form-group">
+									    <label class="col-sm-4 control-label">Gender</label>
+									    <div class="col-sm-2">
+									    	<div class="input_styled inlinelist">
+											    <div class="rowRadio col-sm-6">
+											        <input type="radio" name="gender" value="M" id="gender_M">
+											        <label for="gender_M">Male</label>
+											    </div>
+											    <div class="rowRadio col-sm-6">
+											        <input type="radio" name="gender" value="F" id="gender_F">
+											        <label for="gender_F">Female</label>
+											    </div>
+											</div>
+									    </div>
+									  </div>
+									  <!-- Smoking? -->
+									  <div class="form-group">
+									    <label class="col-sm-4 control-label">Smoking Status</label>
+									    <div class="col-sm-2">
+									    	<div class="input_styled inlinelist">
+											    <div class="rowRadio col-sm-6">
+											        <input type="radio" name="smoke" value="1" id="smoke_1">
+											        <label for="smoke_1">Yes</label>
+											    </div>
+											    <div class="rowRadio col-sm-6">
+											        <input type="radio" name="smoke" value="0" id="smoke_0">
+											        <label for="smoke_0">No</label>
+											    </div>
+											</div>
+									    </div>
+									  </div>
+									  <!-- Job -->
+									  <div class="form-group">
+									    <label for="occupation" class="col-sm-4 control-label">Occupation</label>
+									    <div class="col-sm-6">
+									      <select style='background-color:transparent;color:#8e8071;' class="form-control" id="occupation" name="occupation">
+									      	<option value="" disabled selected>Select your occupation...</option>
+									      		<?php echo getOccupationDataSelectOptionsHtml(); ?>
+									      </select>
+									    </div>
+									  </div>
+									  <!-- Premium Structure -->
+									  <div class="form-group">
+									    <label for="premiumStructure" class="col-sm-4 control-label">Premium Structure</label>
+									    <div class="col-sm-6">
+									      <select style='background-color:transparent;color:#8e8071;' class="form-control" id="premiumStructure" name="premiumStructure">
+									      	<option value="" disabled selected>Select your premium structure...</option>
+									      	<option value="S">Stepped</option>
+									      	<option value="L">Level</option>
+									      </select>
+									    </div>
+									  </div>
+									  <!-- Benefit Insured -->
+									  <div class="form-group">
+									    <label for="benefit" class="col-sm-4 control-label">Benefit / Sum Insured ($)</label>
+									    <div class="col-sm-6">
+									      <input type="text" class="form-control" id="benefit" name="benefit" placeholder="Benifit / Sum Insured">
+									    </div>
+									  </div>
+									  <!-- Premium -->
+									  <div class="form-group">
+									    <label for="premium" class="col-sm-4 control-label">Premium</label>
+									    <div class="col-sm-2">
+									      <input type="text" class="form-control" id="premium" name="premium" placeholder="Premium">
+									    </div>
+									    <label for="premiumFreq" class="col-sm-1 control-label">Paid</label>
+									    <div class="col-sm-2">
+									      <select style='background-color:transparent;color:#8e8071;' class="form-control" id="premiumFreq" name="premiumFreq">
+									      	<option value="0">yearly</option>
+									      	<option value="1">half yearly</option>
+									      	<option value="2">quarterly</option>
+									      	<option value="3">monthly</option>
+									      </select>
+									    </div>
+									  </div>
+									</form>
 			   					</div>
 			   				</div>
 			   				<!-- Step 3 -->
-			   				<h1>Details</h1>
+			   				<h1>More Details</h1>
 		   					<div>
 		   						<div id='step3_upload' class='upload' style='display:none'>
 			   						Upload
 			   					</div>
 			   					<div id='step3_form'  class='form' style='display:none'>
-			   						Form
+			   						<form class="form-horizontal" role="form">
+			   						<!-- Insurer -->
+									<div class="form-group">
+									    <label for="insurer" class="col-sm-4 control-label">Name of Insurer</label>
+									    <div class="col-sm-6">
+									      <select style='background-color:transparent;color:#8e8071;' class="form-control" id="insurer" name="insurer">
+									      	<option value="" disabled selected>Select your insurer...</option>
+									      	<?php 
+									      		$suppliers=getSupplierData();
+									      		foreach($suppliers AS $supplierCode => $supplierName){
+									      			echo "<option value='$supplierCode'>$supplierName</option>";
+									      		}
+									      	?>
+									      </select>
+									    </div>
+									</div>
+									<!-- Cover Type -->
+									<div class="form-group">
+									    <label for="coverType" class="col-sm-4 control-label">Type of Cover</label>
+									    <div class="col-sm-6">
+									      <select style='background-color:transparent;color:#8e8071;' class="form-control" id="coverType" name="coverType">
+									      	<option value="" disabled selected>Select your cover type...</option>
+									      	<option value="trm">Life Cover</option>
+									      </select>
+									    </div>
+									</div>
+									<!-- Product -->
+									<div class="form-group">
+									    <label for="product" class="col-sm-4 control-label">Product</label>
+									    <div class="col-sm-6">
+									      <select style='background-color:transparent;color:#8e8071;' class="form-control" id="product" name="product">
+									      	<option value="" disabled selected>Select your cover product...</option>
+									      	<?php 
+									      		$products=getProductData();
+									      		foreach($products AS $product){
+									      			echo "<option data-insurer='$product->SupplierCode' value='$product->ProductCode'>$product->ProductName</option>";
+									      		}
+									      	?>
+									      </select>
+									    </div>
+									</div>
+									<!-- Importance -->
+									<div class="form-group">
+									    <label class="col-sm-4 control-label">What's more important to you?</label>
+									    <div class="col-sm-4">
+									    	<div class="input_styled inlinelist">
+											    <div class="rowRadio col-sm-6">
+											        <input type="radio" name="importance" value="1" id="importance_1">
+											        <label for="importance_1">Premium Price</label>
+											    </div>
+											    <div class="rowRadio col-sm-6">
+											        <input type="radio" name="importance" value="0" id="importance_0">
+											        <label for="importance_0">Quality Policy</label>
+											    </div>
+											</div>
+									    </div>
+									</div>
+									</form>
 			   					</div>
 			   				</div>
 			   				<!-- Step 4 -->
@@ -131,7 +295,9 @@
 			   						Upload
 			   					</div>
 			   					<div id='step4_form' class='form' style='display:none'>
-			   						Form
+			   						<div class='center-block' style='width:200px;text-align:center'>
+			   							<span style='font-size:30px;'><i class="fa fa-spinner fa-spin"></i> Loading...</span>
+			   						</div>
 			   					</div>
 			   				</div>
 	   					</div>
@@ -139,20 +305,47 @@
 				</div>
 	        </div>
         </div>
-        <!--/ container -->
     </div>
-    <!-- Hidden Container -->
-    <div style='display:none'>
 
+    <!-- Hidden Container -->
+    <div style='display:none' id='preloader'>
+    	<div class='center-block' style='width:200px;text-align:center'>
+			<span style='font-size:30px;'><i class="fa fa-spinner fa-spin"></i> Loading...</span>
+		</div>
     </div>
 </body>
 <script>
+	function validateForm(){
+		if (jQuery("#dob").val()==""){
+			return false;
+		}
+		if (jQuery("#gender").val()==""){
+			return false;
+		}
+		if (jQuery("#smoke").val()==""){
+			return false;
+		}
+		if (jQuery("#occupation").val()==""){
+			return false;
+		}
+		if (jQuery("#premiumStructure").val()==""){
+			return false;
+		}
+		if (jQuery("#benefit").val()==""){
+			return false;
+		}
+		return true;
+	}
 
 	var step=jQuery("#getStarted").steps({
-		forceMoveForward:true,
+		forceMoveForward:false,
 		enableAllSteps:false,
     	transitionEffect:1,
     	onStepChanging:function(event, currentIndex, newIndex) {
+    		if (newIndex==3) {
+    			jQuery("#step4_form").html(jQuery("#preloader").html());
+    		}
+
     		if (currentIndex==0){
     			// Check all the question has been answered
     			if (jQuery("[name='hasInsurance']:checked").val()==1){
@@ -163,11 +356,31 @@
     				// Under constrcution
     				return false;
     			}
-    		} else if (true) {
+    		} else if (currentIndex==1) {
+    			return validateForm();
 
-    		}
-    		console.log("leaving "+currentIndex);
-    		console.log("entering "+newIndex);
+    		} else if (currentIndex==2) {
+
+    			var params=new Array();
+    			jQuery("form").each(function(index, el) {
+    				console.log(this);
+    				console.log(jQuery(this).serializeArray());
+    				params=params.concat(jQuery(this).serializeArray());
+    			});
+    			jQuery.ajax({
+    				url: '../subPages/getPremiumQuote.php',
+    				type: 'POST',
+    				dataType: 'html',
+    				data: params,
+    			})
+    			.done(function(data) {
+    				jQuery("#step4_form").html(data);
+    			});
+    			
+    		} 
+
+
+
     		return true;
     	}
     });
@@ -183,9 +396,6 @@
 				jQuery(".hasntInsurance").hide();
 			}
 		});
-	});
-
-	jQuery(document).ready(function($) {
 		jQuery("[name='how']").click(function(event) {
 			var val=jQuery(this).val();
 			if (val=="form"){
@@ -196,7 +406,11 @@
 				jQuery(".form").hide();
 			}
 		});
+		jQuery("#dob").datepicker({
+			dateFormat:"dd/mm/yy",
+		});
 	});
+
 	
 
     
