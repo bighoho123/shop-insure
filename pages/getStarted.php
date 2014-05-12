@@ -1,6 +1,13 @@
-<?php  
-	include("../includes/omniumAPI.php")
+<?php 
+/*  The Get Started page for the ShopInsure app
+
+	This get started page guides user to either upload a file to us or fill in there own form
+
+	Author: Jinzhe Li <jinzhedna@gmail.com> 
+*/	
+	include("../includes/omniumAPI.php");
 ?>
+	
 <!doctype html>
 <!--[if lt IE 7 ]><html lang="en" class="no-js ie6"> <![endif]-->
 <!--[if IE 7 ]><html lang="en" class="no-js ie7"> <![endif]-->
@@ -23,6 +30,8 @@
 <script src="../js/jquery.steps.min.js"></script>
 <script src="../js/jquery.customInput.js"></script>
 
+<!-- Ajax Form -->
+<script src="../js/jquery.form.js"></script> 
 <!-- Style CSS -->
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 <link href="../style.css" media="screen" rel="stylesheet">
@@ -117,7 +126,14 @@
 		   					<h1>Insurance Details</h1>
 		   					<div>
 		   						<div id='step2_upload' class='upload' style='display:none'>
-			   						Upload
+		   							Please upload a copy of your policy schedule so we can research on our insurance database and get back to you.
+		   							<form id='fileUpload' method="POST" enctype="multipart/form-data" action="../widgetFunction/saveFile.php">
+		   								<input type="file" style='float:right;margin-top:50px' name='upload' id='upload'>
+		   								<input type="hidden" id="emailNameHidden" name="emailNameHidden">
+										<input type="hidden" id="emailContactHidden" name="emailContactHidden">
+										<input type="hidden" id="emailNoteHidden" name="emailNoteHidden">
+		   							</form>
+			   						
 			   					</div>
 			   					<div id='step2_form' class='form' style='display:none'>
 			   						<form class="form-horizontal" role="form">
@@ -225,7 +241,29 @@
 			   				<h1>More Details</h1>
 		   					<div>
 		   						<div id='step3_upload' class='upload' style='display:none'>
-			   						Upload
+		   							<form class="form-horizontal" role="form">
+				   						<!-- Email Name -->
+										<div class="form-group">
+										    <label for="emailName" class="col-sm-4 control-label">Name</label>
+										    <div class="col-sm-6">
+										      <input type="text" class="form-control" id="emailName" name="emailName" placeholder="Your name...">
+										    </div>
+										</div>
+										<!-- Contact Method -->
+										<div class="form-group">
+										    <label for="emailContact" class="col-sm-4 control-label">Contact Details</label>
+										    <div class="col-sm-6">
+										      <input type="text" class="form-control" id="emailContact" name="emailContact" placeholder="Your preferred contact (phone/email)...">
+										    </div>
+										</div>
+										<!-- Note -->
+										<div class="form-group">
+										    <label for="emailNote" class="col-sm-4 control-label">Note</label>
+										    <div class="col-sm-6">
+										      <textarea style='height:300px' type="text" class="form-control" id="emailNote" name="emailNote" placeholder="Things you want us to know..."></textarea>
+										    </div>
+										</div>
+									</form>
 			   					</div>
 			   					<div id='step3_form'  class='form' style='display:none'>
 			   						<form class="form-horizontal" role="form">
@@ -260,12 +298,6 @@
 									    <div class="col-sm-6">
 									      <select style='background-color:transparent;color:#8e8071;' class="form-control" id="product" name="product">
 									      	<option value="" disabled selected>Select your cover product...</option>
-									      	<?php 
-									      		$products=getProductData();
-									      		foreach($products AS $product){
-									      			echo "<option data-insurer='$product->SupplierCode' value='$product->ProductCode'>$product->ProductName</option>";
-									      		}
-									      	?>
 									      </select>
 									    </div>
 									</div>
@@ -317,21 +349,27 @@
 <script>
 	function validateForm(){
 		if (jQuery("#dob").val()==""){
+
 			return false;
 		}
 		if (jQuery("#gender").val()==""){
+			
 			return false;
 		}
 		if (jQuery("#smoke").val()==""){
+			
 			return false;
 		}
 		if (jQuery("#occupation").val()==""){
+			
 			return false;
 		}
 		if (jQuery("#premiumStructure").val()==""){
+			
 			return false;
 		}
 		if (jQuery("#benefit").val()==""){
+			
 			return false;
 		}
 		return true;
@@ -343,10 +381,39 @@
     	transitionEffect:1,
     	onStepChanging:function(event, currentIndex, newIndex) {
     		if (newIndex==3) {
-    			jQuery("#step4_form").html(jQuery("#preloader").html());
-    		}
-
-    		if (currentIndex==0){
+    			if (jQuery("[name='how']:checked").val()=="form"){
+	    			jQuery("#step4_form").html(jQuery("#preloader").html());
+	    			var params=new Array();
+	    			jQuery("form").each(function(index, el) {
+	    				params=params.concat(jQuery(this).serializeArray());
+	    			});
+	    			jQuery.ajax({
+	    				url: '../subPages/getPremiumQuote.php',
+	    				type: 'POST',
+	    				dataType: 'html',
+	    				data: params,
+	    			})
+	    			.done(function(data) {
+	    				jQuery("#step4_form").html(data);
+	    			});	
+	    		} else {
+	    			jQuery("#emailNameHidden").val(jQuery("#emailName").val());
+	    			jQuery("#emailContactHidden").val(jQuery("#emailContact").val());
+	    			jQuery("#emailNoteHidden").val(jQuery("#emailNote").val());
+	    			if (jQuery("#emailContactHidden").val()==""){
+	    				return false;
+	    			} 
+	    			var formData=new FormData(jQuery("#fileUpload")[0]);
+	    			
+	    			jQuery("#fileUpload").ajaxSubmit({
+	    				success:function(data){
+	    					jQuery("#step4_upload").html(data.responseText);
+	    				}
+	    			});
+	    		}
+    		} else if (newIndex==0) {
+    			return true;
+    		} else if (newIndex==1) {
     			// Check all the question has been answered
     			if (jQuery("[name='hasInsurance']:checked").val()==1){
     				if (jQuery("[name='how']:checked").length==0){
@@ -356,26 +423,29 @@
     				// Under constrcution
     				return false;
     			}
+    		} else if (newIndex==2) {
+    			
+    			if (jQuery("[name='how']:checked").val()=="form"){
+	    			return validateForm();
+	    		} else {
+	    			if (jQuery("#upload").val()!=""){
+		    			return true;
+		    		} else {
+		    			return false;
+		    		}
+	    			
+	    		}
+    		}
+
+
+    		if (currentIndex==0){
+    			
     		} else if (currentIndex==1) {
-    			return validateForm();
+    			
 
     		} else if (currentIndex==2) {
 
-    			var params=new Array();
-    			jQuery("form").each(function(index, el) {
-    				console.log(this);
-    				console.log(jQuery(this).serializeArray());
-    				params=params.concat(jQuery(this).serializeArray());
-    			});
-    			jQuery.ajax({
-    				url: '../subPages/getPremiumQuote.php',
-    				type: 'POST',
-    				dataType: 'html',
-    				data: params,
-    			})
-    			.done(function(data) {
-    				jQuery("#step4_form").html(data);
-    			});
+    			
     			
     		} 
 
@@ -409,6 +479,21 @@
 		jQuery("#dob").datepicker({
 			dateFormat:"dd/mm/yy",
 		});
+
+		jQuery("#insurer").change(function(){
+			var insurer=jQuery("#insurer").val();
+			jQuery.ajax({
+			  url: '../subPages/getProductOptionHTML.php',
+			  type: 'POST',
+			  dataType: 'html',
+			  data: {insurer:insurer},
+			  success: function(data, textStatus, xhr) {
+			    jQuery("#product").html(data);
+			  }
+			});
+			
+			
+		})
 	});
 
 	

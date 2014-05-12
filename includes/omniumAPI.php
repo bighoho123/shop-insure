@@ -13,11 +13,11 @@
 
 
 // User name and pass for omnium
-$omniumuser = 'WORKSORTED';
-$omniumpass = 'ZJ63J28';
+$omniumuser = 'USERNAME';
+$omniumpass = 'PASSWORD';
 
 // Advisor ID for omnium, fails without it!
-$omniumadvisoridentifier = 'test@worksorted.com.au'; // needed to get premiums
+$omniumadvisoridentifier = 'JINZHE'; // needed to get premiums
 
 
 
