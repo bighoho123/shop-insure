@@ -30,6 +30,8 @@
 <script src="../js/jquery.steps.min.js"></script>
 <script src="../js/jquery.customInput.js"></script>
 
+
+
 <!-- Ajax Form -->
 <script src="../js/jquery.form.js"></script> 
 <!-- Style CSS -->
@@ -213,8 +215,9 @@
 									  </div>
 									  <!-- Benefit Insured -->
 									  <div class="form-group">
-									    <label for="benefit" class="col-sm-4 control-label">Benefit / Sum Insured ($)</label>
-									    <div class="col-sm-6">
+									    <label for="benefit" class="col-sm-4 control-label">Benefit / Sum Insured</label>
+									    <div class="col-sm-6 input-group" style='padding-right:15px;padding-left:15px;'>
+								    	  <span class="input-group-addon" style="">$</span>
 									      <input type="text" class="form-control" id="benefit" name="benefit" placeholder="Benifit / Sum Insured">
 									    </div>
 									  </div>
@@ -324,7 +327,9 @@
 			   				<h1>Result</h1>
 		   					<div>
 		   						<div id='step4_upload' class='upload' style='display:none'>
-			   						Upload
+			   						<div class='center-block' style='width:200px;text-align:center'>
+			   							<span style='font-size:30px;'><i class="fa fa-spinner fa-spin"></i> Processing...</span>
+			   						</div>
 			   					</div>
 			   					<div id='step4_form' class='form' style='display:none'>
 			   						<div class='center-block' style='width:200px;text-align:center'>
@@ -407,7 +412,7 @@
 	    			
 	    			jQuery("#fileUpload").ajaxSubmit({
 	    				success:function(data){
-	    					jQuery("#step4_upload").html(data.responseText);
+	    					jQuery("#step4_upload").html(data);
 	    				}
 	    			});
 	    		}
@@ -494,6 +499,8 @@
 			
 			
 		})
+
+
 	});
 
 	

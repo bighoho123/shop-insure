@@ -99,3 +99,4 @@
 		<?php } ?>
 	</tbody>
 </table>
+<div style="width:100%;text-align:right">* The result has been sorted based on the preference you selected earlier.</div>

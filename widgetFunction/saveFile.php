@@ -21,7 +21,7 @@
 		$mail->IsSMTP(); 
 	    $mail->Host = "localhost"; 
 	    $mail->SMTPAuth=false;
-
+	    
 		$mail->FromName = 'ShopInsure';
 		$mail->addAddress('jinzhe@dnaevolution.com.au');
 
