@@ -16,8 +16,9 @@
 $omniumuser = 'USERNAME';
 $omniumpass = 'PASSWORD';
 
+
 // Advisor ID for omnium, fails without it!
-$omniumadvisoridentifier = 'JINZHE'; // needed to get premiums
+$omniumadvisoridentifier = 'test@worksorted.com.au'; // needed to get premiums
 
 
 
@@ -64,7 +65,8 @@ $businessExpensesWaitingPeriodOptions = array('14' 		=> '14 days',
 
   
     
-	$wsdl = 'http://dev.omnilife.com.au/OmniLifeWebService/OmniLifeWebService.asmx?wsdl';
+	// $wsdl = 'http://dev.omnilife.com.au/OmniLifeWebService/OmniLifeWebService.asmx?wsdl'; // v1.x API deprecated
+	$wsdl = "http://uat.omnilife.com.au/api/2/OmniLifeWebService.asmx?wsdl";
 	
     $soapclient = new SoapClient($wsdl, array(
                             "trace"=>1,
